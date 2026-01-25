@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
 
 posts : list[dict] = [
     {
@@ -20,9 +23,13 @@ posts : list[dict] = [
     }
 ]
 
-@app.get('/',response_class=HTMLResponse,include_in_schema=False)
+@app.get('/',response_class=HTMLResponse,include_in_schema=False) #'include_in_schema=False' hides this route from the automatic 'docs' page
 def home():
     return f"<h1>Hello WOrld!</h1>"
+
+@app.get('/home', include_in_schema=False)
+def home(request: Request):
+    return templates.TemplateResponse(request,"home.html",{"posts": posts})
 
 @app.get('/api/posts')
 @app.get('/api/posts_yo')
