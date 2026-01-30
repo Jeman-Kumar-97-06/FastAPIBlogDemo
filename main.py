@@ -19,6 +19,7 @@ async def read_item(item_id: int):
 
 @app.get('/models/{model_name}')
 async def get_model(model_name: ModelName):
+    #Conditional Responses Based on Enum Values
     if model_name == ModelName.alexnet:
         return {"model_name": model_name, "message": "Deep Learning FTW!"}
     elif model_name == ModelName.resnet:
