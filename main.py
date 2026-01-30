@@ -9,6 +9,8 @@ class ModelName(str, Enum):
     resnet = "resnet"
     lenet = "lenet"
 
+fast_items_db = [{"item_name": "Foo"}, {"item_name": "Bar"}, {"item_name": "Baz"}]
+
 @app.get('/')
 async def root():
     return {"message": "Hello, World!"}
@@ -28,3 +30,11 @@ async def get_model(model_name: ModelName):
         return {"model_name": model_name, "message": "LeNet is the best!"}
     return {"model_name": model_name, "message": "Unknown model"}
 
+#Only allows file paths that can include slashes:
+@app.get('/custom/{file:path}')
+async def read_custom_file(file: str):
+    return {"file_path": file}
+
+@app.get('/fast-items/')
+async def read_item(skip: int = 0, limit: int = 10):#skip means how many items to skip before starting to collect the result set. skip=0 means start from the beginning.
+    return fast_items_db[skip : skip + limit]
